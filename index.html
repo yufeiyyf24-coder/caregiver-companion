@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
@@ -964,6 +964,174 @@
     font-size: 16px;
   }
   .doctor-manage-delete:active { background: rgba(255,80,80,0.2); }
+
+  /* 打卡详情页 */
+  .checkin-detail-header {
+    text-align: center;
+    padding: 20px 0;
+  }
+  .checkin-detail-icon {
+    font-size: 48px;
+    margin-bottom: 8px;
+  }
+  .checkin-detail-title {
+    font-size: 20px;
+    font-weight: 800;
+    color: #333;
+  }
+  .checkin-detail-status {
+    margin-top: 8px;
+    font-size: 14px;
+  }
+  .form-group {
+    margin-bottom: 16px;
+  }
+  .form-label {
+    font-size: 15px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 8px;
+    display: block;
+  }
+  .form-label-sub {
+    font-size: 13px;
+    color: #888;
+    font-weight: 400;
+    margin-left: 6px;
+  }
+  .option-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .option-btn {
+    padding: 8px 16px;
+    border-radius: 20px;
+    border: 1.5px solid #e0e0e0;
+    background: #fff;
+    color: #666;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .option-btn:active { transform: scale(0.96); }
+  .option-btn.selected {
+    border-color: #15B7A8;
+    background: rgba(21,183,168,0.08);
+    color: #15B7A8;
+    font-weight: 600;
+  }
+  .slider-group {
+    padding: 10px 0;
+  }
+  .slider-group input[type=range] {
+    width: 100%;
+    -webkit-appearance: none;
+    height: 6px;
+    background: #e0e0e0;
+    border-radius: 3px;
+    outline: none;
+  }
+  .slider-group input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 24px; height: 24px;
+    background: #15B7A8;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(21,183,168,0.3);
+  }
+  .slider-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: #888;
+    margin-top: 8px;
+  }
+  .mood-emoji-row {
+    display: flex;
+    justify-content: space-around;
+    padding: 10px 0;
+  }
+  .mood-emoji {
+    font-size: 32px;
+    cursor: pointer;
+    opacity: 0.4;
+    transition: all 0.2s;
+    filter: grayscale(0.6);
+    text-align: center;
+  }
+  .mood-emoji:active { transform: scale(0.9); }
+  .mood-emoji.selected {
+    opacity: 1;
+    filter: grayscale(0);
+    transform: scale(1.15);
+  }
+  .mood-emoji-label {
+    font-size: 11px;
+    color: #888;
+    text-align: center;
+    margin-top: 4px;
+  }
+  .textarea-box {
+    width: 100%;
+    min-height: 80px;
+    background: #f5f7fa;
+    border: 1px solid rgba(0,0,0,0.05);
+    border-radius: 12px;
+    padding: 12px 16px;
+    font-size: 15px;
+    outline: none;
+    resize: vertical;
+    font-family: inherit;
+  }
+  .textarea-box:focus { border-color: #15B7A8; background: #fff; }
+  .time-input-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .time-input {
+    flex: 1;
+    padding: 10px 14px;
+    background: #f5f7fa;
+    border: 1px solid rgba(0,0,0,0.05);
+    border-radius: 10px;
+    font-size: 15px;
+    text-align: center;
+    outline: none;
+  }
+  .time-input:focus { border-color: #15B7A8; background: #fff; }
+  .check-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(0,0,0,0.03);
+  }
+  .check-item:last-child { border-bottom: none; }
+  .check-box {
+    width: 22px;
+    height: 22px;
+    border-radius: 6px;
+    border: 2px solid #ddd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    flex-shrink: 0;
+  }
+  .check-box.checked {
+    background: #15B7A8;
+    border-color: #15B7A8;
+  }
+  .check-box.checked::after {
+    content: "✓";
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+  }
+  .check-text { font-size: 14px; color: #444; }
 </style>
 </head>
 <body>
@@ -1129,34 +1297,34 @@
       <div class="card">
         <div class="card-title">
           <span>每日打卡</span>
-          <span class="tag tag-green">6/7 已完成</span>
+          <span class="tag tag-green" id="checkinCount">6/7 已完成</span>
         </div>
         <div class="checkin-grid">
-          <div class="checkin-item done" onclick="toggleCheckin(this)">
+          <div class="checkin-item done" onclick="openCheckinDetail('sleep', this)">
             <div class="checkin-icon">😴</div>
             <div class="checkin-label">睡眠</div>
           </div>
-          <div class="checkin-item done" onclick="toggleCheckin(this)">
+          <div class="checkin-item done" onclick="openCheckinDetail('mood', this)">
             <div class="checkin-icon">😊</div>
             <div class="checkin-label">情绪</div>
           </div>
-          <div class="checkin-item" onclick="toggleCheckin(this)">
+          <div class="checkin-item" onclick="openCheckinDetail('social', this)">
             <div class="checkin-icon">👥</div>
             <div class="checkin-label">社交</div>
           </div>
-          <div class="checkin-item done" onclick="toggleCheckin(this)">
+          <div class="checkin-item done" onclick="openCheckinDetail('med', this)">
             <div class="checkin-icon">💊</div>
             <div class="checkin-label">服药</div>
           </div>
-          <div class="checkin-item done" onclick="toggleCheckin(this)">
+          <div class="checkin-item done" onclick="openCheckinDetail('physical', this)">
             <div class="checkin-icon">💪</div>
             <div class="checkin-label">身体</div>
           </div>
-          <div class="checkin-item" onclick="toggleCheckin(this)">
+          <div class="checkin-item" onclick="openCheckinDetail('observe', this)">
             <div class="checkin-icon">👁️</div>
             <div class="checkin-label">观察</div>
           </div>
-          <div class="checkin-item done" onclick="toggleCheckin(this)">
+          <div class="checkin-item done" onclick="openCheckinDetail('selfeval', this)">
             <div class="checkin-icon">❤️</div>
             <div class="checkin-label">自评</div>
           </div>
@@ -2349,6 +2517,24 @@
     </div>
   </div>
 
+  <!-- ===== 打卡详情底部弹窗 ===== -->
+  <div class="chat-modal-overlay" id="checkinModalOverlay" onclick="closeCheckinDetail()">
+    <div class="chat-modal" onclick="event.stopPropagation()" style="height:82%;">
+      <div class="chat-modal-header">
+        <div class="chat-modal-title" id="checkinModalTitle">
+          <span>打卡详情</span>
+        </div>
+        <button class="chat-close-btn" onclick="closeCheckinDetail()">✕</button>
+      </div>
+      <div class="chat-modal-body" id="checkinDetailBody">
+        <!-- 动态填充 -->
+      </div>
+      <div class="chat-modal-footer" id="checkinModalFooter" style="text-align:center;">
+        <button class="btn-primary" onclick="saveCheckin()">✓ 保存打卡记录</button>
+      </div>
+    </div>
+  </div>
+
   <!-- ===== AI问答大弹窗 ===== -->
   <div class="chat-modal-overlay" id="chatModalOverlay" onclick="closeChatModal()">
     <div class="chat-modal" onclick="event.stopPropagation()">
@@ -2410,6 +2596,9 @@ updateClock();
 setTimeout(() => {
   document.getElementById('loadingScreen').classList.add('hidden');
 }, 2800);
+
+// 初始化打卡计数
+updateCheckinCount();
 
 // Tab标题映射
 const tabTitles = {
@@ -2489,9 +2678,269 @@ function toggleTask(el) {
   text.classList.toggle('done');
 }
 
-// 打卡切换
+// 打卡切换（保留基础切换）
 function toggleCheckin(el) {
   el.classList.toggle('done');
+}
+
+// ===== 打卡详情页 =====
+const checkinConfig = {
+  sleep: {
+    icon: '😴', title: '睡眠',
+    fields: [
+      { type:'time', label:'入睡 / 起床时间', keys:['sleepTime','wakeTime'], values:['23:00','06:30'] },
+      { type:'duration', label:'睡眠时长', id:'sleepDuration', defaultValue:'7h 30min' },
+      { type:'options', label:'睡眠质量', key:'quality', options:['很好','一般','较差','很差'] },
+      { type:'sleepStages', label:'睡眠分期（同步运动手环）', key:'stages' },
+      { type:'textarea', label:'备注', placeholder:'记录睡眠异常情况，如多梦、早醒、噩梦等...' }
+    ]
+  },
+  mood: {
+    icon: '😊', title: '情绪',
+    fields: [
+      { type:'mood', label:'今日情绪', key:'mood' },
+      { type:'options', label:'情绪波动', key:'volatility', options:['无波动','轻微波动','明显波动','剧烈波动'] },
+      { type:'textarea', label:'备注', placeholder:'描述情绪变化的具体表现和可能的诱因...' }
+    ]
+  },
+  social: {
+    icon: '👥', title: '社交',
+    fields: [
+      { type:'options', label:'今日是否有社交活动', key:'hasSocial', options:['有社交','无社交'] },
+      { type:'options', label:'社交对象', key:'socialTarget', options:['家人','朋友','同事','邻居','陌生人'] },
+      { type:'options', label:'社交质量', key:'socialQuality', options:['愉快','一般','不愉快','紧张'] },
+      { type:'textarea', label:'备注', placeholder:'记录社交中的具体情况...' }
+    ]
+  },
+  med: {
+    icon: '💊', title: '服药',
+    fields: [
+      { type:'checklist', label:'今日用药确认', key:'meds', items:[
+        { name:'奥氮平 5mg · 早饭后', checked:true },
+        { name:'盐酸舍曲林 50mg · 晚饭后', checked:false }
+      ]},
+      { type:'options', label:'服药反应', key:'reaction', options:['无不适','轻微口干','嗜睡','食欲增加','其他'] },
+      { type:'textarea', label:'备注', placeholder:'记录副作用或服药异常情况...' }
+    ]
+  },
+  physical: {
+    icon: '💪', title: '身体',
+    fields: [
+      { type:'weight', label:'体重记录', key:'weight', current:'70.0', unit:'kg' },
+      { type:'options', label:'体重变化', key:'weightChange', options:['保持','增加','下降'] },
+      { type:'options', label:'身体状况', key:'condition', options:['精力充沛','正常','疲劳','不适'] },
+      { type:'options', label:'食欲', key:'appetite', options:['很好','正常','较差','很差'] },
+      { type:'textarea', label:'备注', placeholder:'记录身体状况变化...' }
+    ]
+  },
+  observe: {
+    icon: '👁️', title: '观察',
+    fields: [
+      { type:'options', label:'是否出现幻觉', key:'hallucination', options:['无','疑似','明显'] },
+      { type:'options', label:'是否出现妄想', key:'delusion', options:['无','疑似','明显'] },
+      { type:'options', label:'言语逻辑', key:'speech', options:['正常','轻微混乱','明显混乱'] },
+      { type:'options', label:'行为异常', key:'behavior', options:['无异常','轻微异常','明显异常'] },
+      { type:'textarea', label:'备注', placeholder:'详细记录观察到的症状表现...' }
+    ]
+  },
+  selfeval: {
+    icon: '❤️', title: '自评',
+    fields: [
+      { type:'mood', label:'整体自我感受', key:'overall' },
+      { type:'slider', label:'压力水平', sub:'（0无压力 ~ 10极大压力）', min:0, max:10, value:3, step:1, labels:['0','2','4','6','8','10'] },
+      { type:'options', label:'今日整体状态', key:'status', options:['很好','不错','一般','较差','很差'] },
+      { type:'textarea', label:'备注', placeholder:'记录今天的感受和想法...' }
+    ]
+  }
+};
+
+let currentCheckinType = null;
+let currentCheckinEl = null;
+
+function openCheckinDetail(type, el) {
+  currentCheckinType = type;
+  currentCheckinEl = el;
+  const config = checkinConfig[type];
+  if (!config) return;
+
+  const isDone = el.classList.contains('done');
+  document.getElementById('checkinModalTitle').innerHTML = '<span style="font-size:22px;">' + config.icon + '</span> <span>' + config.title + '</span>';
+
+  const body = document.getElementById('checkinDetailBody');
+  let html = '';
+
+  config.fields.forEach(function(f) {
+    html += '<div class="card"><div class="form-group">';
+    html += '<span class="form-label">' + f.label;
+    if (f.sub) html += '<span class="form-label-sub">' + f.sub + '</span>';
+    html += '</span>';
+
+    if (f.type === 'slider') {
+      html += '<div class="slider-group">';
+      html += '<input type="range" min="' + f.min + '" max="' + f.max + '" step="' + (f.step||1) + '" value="' + (f.value||0) + '" style="width:100%;">';
+      html += '<div class="slider-labels">';
+      (f.labels||[]).forEach(function(l) { html += '<span>' + l + '</span>'; });
+      html += '</div></div>';
+    }
+    else if (f.type === 'options') {
+      html += '<div class="option-group">';
+      f.options.forEach(function(opt, i) {
+        html += '<div class="option-btn' + (i===0?' selected':'') + '" onclick="selectOption(this)">' + opt + '</div>';
+      });
+      html += '</div>';
+    }
+    else if (f.type === 'mood') {
+      var moods = [
+        { emoji:'😄', label:'很好' },
+        { emoji:'🙂', label:'不错' },
+        { emoji:'😐', label:'一般' },
+        { emoji:'😔', label:'不太好' },
+        { emoji:'😢', label:'很差' }
+      ];
+      html += '<div class="mood-emoji-row">';
+      moods.forEach(function(m, i) {
+        html += '<div style="text-align:center;cursor:pointer;" onclick="selectMood(this)">';
+        html += '<div class="mood-emoji' + (i===1?' selected':'') + '">' + m.emoji + '</div>';
+        html += '<div class="mood-emoji-label">' + m.label + '</div></div>';
+      });
+      html += '</div>';
+    }
+    else if (f.type === 'time') {
+      html += '<div class="time-input-row">';
+      html += '<input class="time-input sleep-time-in" type="time" value="' + (f.values?f.values[0]:'') + '" placeholder="开始时间" onchange="calcSleepDuration()">';
+      html += '<span style="color:#888;">至</span>';
+      html += '<input class="time-input sleep-time-out" type="time" value="' + (f.values?f.values[1]:'') + '" placeholder="结束时间" onchange="calcSleepDuration()">';
+      html += '</div>';
+    }
+    else if (f.type === 'duration') {
+      html += '<div style="text-align:center;padding:10px 0;font-size:28px;font-weight:800;color:#15B7A8;" id="' + (f.id||'') + '">' + (f.defaultValue||'') + '</div>';
+    }
+    else if (f.type === 'sleepStages') {
+      // 圆环数据: 深睡135min(30%), 浅睡230min(51.1%), 快速眼动85min(18.9%), 总计450min
+      var stages = [
+        { label:'深睡', time:'2h 15min', min:135, color:'#3b7ddd' },
+        { label:'浅睡', time:'3h 50min', min:230, color:'#15B7A8' },
+        { label:'快速眼动', time:'1h 25min', min:85, color:'#9b59b6' }
+      ];
+      var totalMin = stages.reduce(function(s,i){return s+i.min;},0);
+      var cx=70, cy=70, r=54, circ=2*Math.PI*r;
+      var offset=0;
+      var segments='';
+      stages.forEach(function(s,i){
+        var len = (s.min/totalMin)*circ;
+        segments += '<circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" fill="none" stroke="'+s.color+'" stroke-width="22" stroke-linecap="butt" stroke-dasharray="'+len.toFixed(1)+' '+(circ-len).toFixed(1)+'" stroke-dashoffset="'+(circ*0.25-offset).toFixed(1)+'" transform="rotate(-90 '+cx+' '+cy+')" style="transition: all 0.6s ease;"/>';
+        offset += len;
+      });
+      html += '<div style="display:flex;align-items:center;gap:16px;">';
+      html += '<div style="position:relative;width:140px;height:140px;flex-shrink:0;">';
+      html += '<svg viewBox="0 0 140 140" style="width:100%;height:100%;">';
+      html += segments;
+      html += '</svg>';
+      html += '<div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none;">';
+      html += '<div style="font-size:22px;font-weight:800;color:#333;">7.5h</div>';
+      html += '<div style="font-size:11px;color:#888;">总时长</div>';
+      html += '</div></div>';
+      html += '<div style="flex:1;">';
+      stages.forEach(function(s){
+        html += '<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(0,0,0,0.03);">';
+        html += '<div style="display:flex;align-items:center;gap:6px;">';
+        html += '<div style="width:10px;height:10px;border-radius:50%;background:'+s.color+';"></div>';
+        html += '<span style="font-size:13px;color:#555;">'+s.label+'</span></div>';
+        html += '<div style="text-align:right;">';
+        html += '<div style="font-size:14px;font-weight:700;color:#333;">'+s.time+'</div>';
+        html += '<div style="font-size:11px;color:#aaa;">'+(s.min/totalMin*100).toFixed(0)+'%</div>';
+        html += '</div></div>';
+      });
+      html += '</div></div>';
+      html += '<div style="text-align:center;margin-top:6px;font-size:11px;color:#aaa;">⌚ 数据同步自运动手环</div>';
+    }
+    else if (f.type === 'weight') {
+      html += '<div style="display:flex;align-items:center;gap:12px;">';
+      html += '<div style="flex:1;text-align:center;background:#f5f7fa;border-radius:12px;padding:12px;">';
+      html += '<div style="font-size:12px;color:#888;margin-bottom:2px;">当前体重</div>';
+      html += '<div style="font-size:24px;font-weight:800;color:#333;">' + (f.current||'--') + '</div>';
+      html += '<div style="font-size:12px;color:#aaa;">' + (f.unit||'kg') + '</div>';
+      html += '</div>';
+      html += '<div style="font-size:20px;color:#888;">→</div>';
+      html += '<div style="flex:1;text-align:center;background:#f5f7fa;border-radius:12px;padding:12px;">';
+      html += '<div style="font-size:12px;color:#888;margin-bottom:2px;">今日体重</div>';
+      html += '<input class="time-input" type="number" step="0.1" placeholder="' + (f.current||'') + '" style="width:100%;font-size:24px;font-weight:800;border:none;background:transparent;text-align:center;padding:4px 0;">';
+      html += '<div style="font-size:12px;color:#aaa;">' + (f.unit||'kg') + '</div>';
+      html += '</div>';
+      html += '</div>';
+    }
+    else if (f.type === 'checklist') {
+      f.items.forEach(function(item) {
+        html += '<div class="check-item">';
+        html += '<div class="check-box' + (item.checked?' checked':'') + '" onclick="toggleCheckBox(this)"></div>';
+        html += '<span class="check-text">' + item.name + '</span>';
+        html += '</div>';
+      });
+    }
+    else if (f.type === 'textarea') {
+      html += '<textarea class="textarea-box" placeholder="' + (f.placeholder||'') + '"></textarea>';
+    }
+    html += '</div></div>';
+  });
+
+  body.innerHTML = html;
+  // 自动计算初始睡眠时长
+  if (type === 'sleep') { setTimeout(function() { calcSleepDuration(); }, 50); }
+  document.getElementById('checkinModalOverlay').classList.add('show');
+}
+
+function closeCheckinDetail() {
+  document.getElementById('checkinModalOverlay').classList.remove('show');
+}
+
+function selectOption(el) {
+  var group = el.parentElement;
+  group.querySelectorAll('.option-btn').forEach(function(b) { b.classList.remove('selected'); });
+  el.classList.add('selected');
+}
+
+function selectMood(el) {
+  var row = el.parentElement.parentElement;
+  row.querySelectorAll('.mood-emoji').forEach(function(e) { e.classList.remove('selected'); });
+  el.querySelector('.mood-emoji').classList.add('selected');
+}
+
+function toggleCheckBox(el) {
+  el.classList.toggle('checked');
+}
+
+function calcSleepDuration() {
+  var inputs = document.querySelectorAll('.sleep-time-in, .sleep-time-out');
+  if (inputs.length < 2) return;
+  var t1 = inputs[0].value, t2 = inputs[1].value;
+  if (!t1 || !t2) return;
+  var a = t1.split(':'), b = t2.split(':');
+  var startMin = parseInt(a[0])*60 + parseInt(a[1]);
+  var endMin = parseInt(b[0])*60 + parseInt(b[1]);
+  if (endMin <= startMin) endMin += 24*60; // 跨天
+  var diff = endMin - startMin;
+  var h = Math.floor(diff/60), m = diff%60;
+  var el = document.getElementById('sleepDuration');
+  if (el) el.textContent = h + 'h ' + m + 'min';
+}
+
+function updateCheckinCount() {
+  var total = document.querySelectorAll('.checkin-item').length;
+  var done = document.querySelectorAll('.checkin-item.done').length;
+  var el = document.getElementById('checkinCount');
+  if (el) {
+    el.textContent = done + '/' + total + ' 已完成';
+    el.className = done === total ? 'tag tag-green' : 'tag tag-orange';
+  }
+}
+
+function saveCheckin() {
+  if (currentCheckinEl) {
+    currentCheckinEl.classList.add('done');
+  }
+  updateCheckinCount();
+  showToast('打卡记录已保存 ✓');
+  setTimeout(function() { closeCheckinDetail(); }, 800);
 }
 
 // 用药勾选
