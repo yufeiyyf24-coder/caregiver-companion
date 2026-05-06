@@ -1427,6 +1427,7 @@
       </div>
 
       <div id="articleList">
+      <div id="articleCards">
       <div class="card" onclick="openPage('articleDetail')" style="cursor:pointer;">
         <div style="display:flex;gap:12px;">
           <div style="width:80px;height:80px;background:rgba(21,183,168,0.1);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:36px;">📖</div>
@@ -1466,6 +1467,7 @@
         </div>
       </div>
 
+      </div><!-- /articleCards -->
       <!-- 家属社群入口 -->
       <div class="card" onclick="openPage('community')" style="cursor:pointer;background:#15B7A8;color:#fff;">
         <div style="display:flex;align-items:center;justify-content:space-between;">
@@ -3022,7 +3024,7 @@ function switchCategory(el, cat) {
   el.style.background = '';
   el.style.color = '';
 
-  const list = document.getElementById('articleList');
+  const list = document.getElementById('articleCards');
   const articles = {
     all: [
       {icon:'📖',title:'精神分裂症的早期识别信号',desc:'了解疾病复发的早期征兆...',tag:'疾病科普',tagClass:'tag-green'},
